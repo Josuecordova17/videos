@@ -2,12 +2,13 @@ function enviar() {
  let name = document.getElementById('name').value,
  link = document.getElementById('link').value,
  clase = document.getElementById('class').value
-let fname = proccesar(name)
+let fname = proccesar(name),
+fclase = proccesar(clase)
 const url='http://localhost:5000/'
     let data={
         name:fname,
         link:link,
-        clase:clase
+        clase:fclase
     }
          fetch(url, {
     method: 'PUT', // or 'PUT'
