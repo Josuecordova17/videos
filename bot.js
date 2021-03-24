@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
   password : '',
   database:'videos'
 });
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5656;
 connection.connect((err)=>{
     if (!err) {
         console.log("Conexion existosa".green)
@@ -30,6 +30,7 @@ console.log(`servidor en puerto ${port}`.yellow)
 })
 //
 app.put('/',(req,res)=>{
+
     let name = req.body.name,
     link = req.body.link,
     clase = req.body.clase
@@ -40,7 +41,7 @@ app.put('/',(req,res)=>{
             console.log(err);    
             }
         })
-        res.send('Hola')
+        res.sendStatus(200)
     })
 app.use(express.static('public'))
 bot.start((ctx) =>{ 
@@ -57,7 +58,7 @@ id : ${ctx.from.id}
 Usuario : ${ctx.from.username}`)
 })
 bot.help((ctx)=>{
-    console.log(clases(ctx))
+    clases(ctx)
 })
 
 bot.on('text', (ctx)=>{
@@ -95,28 +96,33 @@ rows[i].video
 bot.launch()
 //Manda los nombres de las clases que tengo 
 function clases(ctx) {
-    //alertar(ctx.from.first_name,ctx.message.text)
+    alertar(ctx.from.first_name,ctx.message.text)
     var re='';
     connection.query("SELECT `video` FROM `videos`",(err,rows,fields)=>{
         if (!err) {
             var re = ''
             for (let i = 0; i < rows.length; i++) {
-                let nombre =rows[i].video 
-                //console.log(nombre);
+                let n =rows[i].video,
+                nombre=cap(n)
                 if (nombre.indexOf('2021')!=-1) {
                     re =re +`
 `+`<u><b>${nombre}</b></u>`
                 } else {
                     re =re +`
-`+rows[i].video 
+`+nombre
                 }
             }
-            console.log(re);
             ctx.reply(re,{parse_mode:'HTML'})
             }else{
         er(ctx,err)
        }
         })
+    }
+    function cap(n) {
+        let nombre = n.charAt(0).toUpperCase() + n.slice(1);
+        num = nombre.indexOf(' ')
+        nombre =nombre.slice(0,num+1) + nombre.charAt(num+1).toUpperCase() + nombre.slice(num+2);
+    return nombre
     }
     function alertar(nombre,accion) {
         let fecha = new Date();
@@ -131,7 +137,6 @@ function clases(ctx) {
             txt = txt.replace('ó','o')
             txt = txt.replace('ú','u')
              re = txt
-            console.log(txt);    
         } while (re.indexOf('á')!=-1 || re.indexOf('é')!=-1|| re.indexOf('í')!=-1|| re.indexOf('ó')!=-1|| re.indexOf('ú')!=-1);
     return re    
     }

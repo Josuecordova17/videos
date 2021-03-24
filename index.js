@@ -57,7 +57,7 @@ function responder(ctx,txt) {
         try {
         ctx.replyWithDocument({source:`D:/rars/${txt}.part${i}.rar`})    
         } catch (err) {
-            console.log('a');
+            console.log(err);
         }
         
     }

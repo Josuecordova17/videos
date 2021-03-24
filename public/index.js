@@ -1,10 +1,12 @@
+var l = document.getElementById('link'),
+n=document.getElementById('name')
 function enviar() {
  let name = document.getElementById('name').value,
  link = document.getElementById('link').value,
  clase = document.getElementById('class').value
 let fname = proccesar(name),
 fclase = proccesar(clase)
-const url='http://localhost:5000/'
+const url='http://localhost:5656/'
     let data={
         name:fname,
         link:link,
@@ -18,7 +20,10 @@ const url='http://localhost:5000/'
     }
   }).then(res => res.json())
   .catch(error => console.error('Error:', error))
-  .then((res)=>console.log('s'));     
+  .then(()=>{
+    l.value=""
+    n.value=clase
+  });     
 }
 //manda el valor en miniscula sin espacios y tildes
 function proccesar(value) {
@@ -31,14 +36,18 @@ let re;
         value = value.replace('í','i')
         value = value.replace('ó','o')
         value = value.replace('ú','u')
-         re = value
-        console.log(value);    
+         re = value   
     } while (re.indexOf('á')!=-1 || re.indexOf('é')!=-1|| re.indexOf('í')!=-1|| re.indexOf('ó')!=-1|| re.indexOf('ú')!=-1);
 return re    
 
 }
+function env(e) {
+if (e.keyCode===13) {
+  enviar()
+}
+}
 function fecha() {
-  const url='http://localhost:5000/'
+  const url='http://localhost:5656/'
   let fecha = new Date();
   fecha=fecha.toString()
   fecha=fecha.slice(0,15)
