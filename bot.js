@@ -60,7 +60,12 @@ Usuario : ${ctx.from.username}`)
 bot.help((ctx)=>{
     clases(ctx)
 })
-
+bot.command(['videos','Videos'],(ctx)=>{
+    clases(ctx)
+})
+bot.hears(['/vídeos','/Vídeos','videos','Videos'], (ctx)=>{
+    clases(ctx)
+})
 bot.on('text', (ctx)=>{
     alertar(ctx.from.first_name,ctx.message.text)
     let txt = ctx.message.text
@@ -86,7 +91,15 @@ rows[i].video
             let sql ="SELECT * FROM `videos` WHERE `video`='"+ txt + "'"
             connection.query(sql,(err,rows,fields)=>{
                 if (!err) {
-                ctx.reply(`El link es : ${rows[0].linkVideo}`)  
+                    if (rows=="") {
+                        er(ctx,err)
+                        ctx.reply(`Oh no el video solicitado no existe :
+Comprueba la ortografia
+Recuerda que siempre se pone el nombre de la clase
+Puedes ver cuales estan disponibles con /videos o poniendo el nombre de la clase`)
+                    } else {
+                     ctx.reply(`El link es : ${rows[0].linkVideo}`)   
+                    }  
                     }else{
                         er(ctx,err)
                }
@@ -129,6 +142,10 @@ function clases(ctx) {
         console.log(`Se respondio solicutud de ${accion} a ${nombre}              ${fecha}`.green);
     }
     function tildes(txt) {
+        //espacios
+        while (txt.indexOf('  ')!=-1) {
+            txt=txt.replace(' ','')   
+        }
     let re;
         do {
             txt = txt.replace('á','a')
@@ -146,4 +163,9 @@ function clases(ctx) {
         bot.telegram.sendMessage(1207906186,`Ocurrio un error a : ${ctx.from.first_name}
 Mensaje : ${ctx.message.text}
 Error : ${err}`)
-    }        
+    }
+    function mensaje(id,msj) {
+     bot.telegram.sendMessage(id,msj)
+     console.log(`Enviando mensaje`);   
+    }
+    //mensaje(1207906186,'Hola')

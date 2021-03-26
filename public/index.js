@@ -29,6 +29,10 @@ const url='http://localhost:5656/'
 function proccesar(value) {
 value= value.toLowerCase()
 value= value.trim()
+//espacios
+while (value.indexOf('  ')!=-1) {
+  value=value.replace(' ','')   
+}
 let re;
     do {
         value = value.replace('á','a')
