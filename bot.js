@@ -8,6 +8,14 @@ console.log('Ejecutando....');
 const mysql = require('mysql');
 const { Router } = require('express')
 const e = require('express')
+const palabras = `Palabras disponibles 
+Fisica
+Biologia
+Quimica
+/help
+/ayuda
+/videos
+/palabras`
 const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -50,6 +58,9 @@ bot.start((ctx) =>{
     ctx.reply('Si no se manda el video al instante o tiene alguna duda Hable con Josue o mande /ayuda y agregar su problema')
     alertar(ctx.from.first_name,ctx.message.text)
 })
+bot.command('/palabras',(ctx)=>{
+    ctx.reply(palabras)
+})
 bot.command('/ayuda',(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
     bot.telegram.sendMessage(1207906186,`Hola Josue, ${ctx.from.first_name} ${ctx.from.last_name} ocupa ayuda urgente
@@ -63,7 +74,7 @@ bot.help((ctx)=>{
 bot.command(['videos','Videos'],(ctx)=>{
     clases(ctx)
 })
-bot.hears(['/vídeos','/Vídeos','videos','Videos'], (ctx)=>{
+bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos'], (ctx)=>{
     clases(ctx)
 })
 bot.on('text', (ctx)=>{
@@ -95,8 +106,8 @@ rows[i].video
                         er(ctx,err)
                         ctx.reply(`Oh no el video solicitado no existe :
 Comprueba la ortografia
-Recuerda que siempre se pone el nombre de la clase
-Puedes ver cuales estan disponibles con /videos o poniendo el nombre de la clase`)
+${palabras}
+Tambien puedes revisar la ortografia`)
                     } else {
                      ctx.reply(`El link es : ${rows[0].linkVideo}`)   
                     }  
