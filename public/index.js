@@ -2,15 +2,15 @@ var l = document.getElementById('link'),
 n=document.getElementById('name')
 function enviar() {
  let name = document.getElementById('name').value,
- link = document.getElementById('link').value,
- clase = document.getElementById('class').value
-let fname = proccesar(name),
-fclase = proccesar(clase)
+ link = document.getElementById('link').value
+let fname = proccesar(name)
+let clase = fname.indexOf(' ')
+clase=fname.slice(0,clase)
 const url='http://localhost:5656/'
     let data={
         name:fname,
         link:link,
-        clase:fclase
+        clase:clase
     }
          fetch(url, {
     method: 'PUT', // or 'PUT'
@@ -22,7 +22,7 @@ const url='http://localhost:5656/'
   .catch(error => console.error('Error:', error))
   .then(()=>{
     l.value=""
-    n.value=clase
+    n.value=""
   });     
 }
 //manda el valor en miniscula sin espacios y tildes

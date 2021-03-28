@@ -8,7 +8,7 @@ console.log('Ejecutando....');
 const mysql = require('mysql');
 const { Router } = require('express')
 const e = require('express')
-const palabras = `Palabras disponibles 
+const palabras = `<u><b>Palabras disponibles</b></u>:
 Fisica
 Biologia
 Quimica
@@ -58,10 +58,10 @@ bot.start((ctx) =>{
     ctx.reply('Si no se manda el video al instante o tiene alguna duda Hable con Josue o mande /ayuda y agregar su problema')
     alertar(ctx.from.first_name,ctx.message.text)
 })
-bot.command('/palabras',(ctx)=>{
-    ctx.reply(palabras)
+bot.command(['/palabras','/p'],(ctx)=>{
+    ctx.reply(palabras,{parse_mode:'HTML'})
 })
-bot.command('/ayuda',(ctx)=>{
+bot.command(['/ayuda','/a'],(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
     bot.telegram.sendMessage(1207906186,`Hola Josue, ${ctx.from.first_name} ${ctx.from.last_name} ocupa ayuda urgente
 El texto fue : ${ctx.message.text}
@@ -71,10 +71,11 @@ Usuario : ${ctx.from.username}`)
 bot.help((ctx)=>{
     clases(ctx)
 })
-bot.command(['videos','Videos'],(ctx)=>{
+bot.command('/h',(ctx)=>(clase()))
+bot.command(['videos','Videos','v'],(ctx)=>{
     clases(ctx)
 })
-bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos'], (ctx)=>{
+bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos','v'], (ctx)=>{
     clases(ctx)
 })
 bot.on('text', (ctx)=>{
@@ -107,7 +108,7 @@ rows[i].video
                         ctx.reply(`Oh no el video solicitado no existe :
 Comprueba la ortografia
 ${palabras}
-Tambien puedes revisar la ortografia`)
+Tambien puedes revisar la ortografia`,{parse_mode:'HTML'})
                     } else {
                      ctx.reply(`El link es : ${rows[0].linkVideo}`)   
                     }  
@@ -169,8 +170,10 @@ function clases(ctx) {
     return re    
     }
     function er(ctx,err) {
-        console.error(err);
-        ctx.reply('A ocurrido un error')
+        console.log(err);
+        if (err!=null) {
+            ctx.reply('A ocurrido un error')    
+        }
         bot.telegram.sendMessage(1207906186,`Ocurrio un error a : ${ctx.from.first_name}
 Mensaje : ${ctx.message.text}
 Error : ${err}`)
