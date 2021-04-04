@@ -14,8 +14,7 @@ Biologia
 Quimica
 /help
 /ayuda
-/videos
-/palabras`
+/videos`
 const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -58,9 +57,6 @@ bot.start((ctx) =>{
     ctx.reply('Si no se manda el video al instante o tiene alguna duda Hable con Josue o mande /ayuda y agregar su problema')
     alertar(ctx.from.first_name,ctx.message.text)
 })
-bot.command(['/palabras','/p'],(ctx)=>{
-    ctx.reply(palabras,{parse_mode:'HTML'})
-})
 bot.command(['/ayuda','/a'],(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
     bot.telegram.sendMessage(1207906186,`Hola Josue, ${ctx.from.first_name} ${ctx.from.last_name} ocupa ayuda urgente
@@ -69,7 +65,7 @@ id : ${ctx.from.id}
 Usuario : ${ctx.from.username}`)
 })
 bot.help((ctx)=>{
-    clases(ctx)
+    ctx.reply(palabras,{parse_mode:'HTML'})
 })
 bot.command('/h',(ctx)=>(clase()))
 bot.command(['videos','Videos','v'],(ctx)=>{
@@ -182,4 +178,6 @@ Error : ${err}`)
      bot.telegram.sendMessage(id,msj)
      console.log(`Enviando mensaje`);   
     }
-    //mensaje(1207906186,'Hola')
+    //mensaje(-1001401909028,'Hola')
+    //Avisar sobre actualizacion
+    //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
