@@ -172,12 +172,13 @@ function clases(ctx) {
         }
         bot.telegram.sendMessage(1207906186,`Ocurrio un error a : ${ctx.from.first_name}
 Mensaje : ${ctx.message.text}
-Error : ${err}`)
+Error : ${err}
+Id:${ctx.from.id}`)
     }
     function mensaje(id,msj) {
      bot.telegram.sendMessage(id,msj)
      console.log(`Enviando mensaje`);   
     }
-    //mensaje(-1001401909028,'Hola')
+    //mensaje(,'Pata pedir de quimica solo pon quimica ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
