@@ -74,6 +74,9 @@ bot.command(['videos','Videos','v'],(ctx)=>{
 bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos','v'], (ctx)=>{
     clases(ctx)
 })
+bot.hears(['gracias','Gracias'],(ctx)=>{
+    ctx.reply('Denada')
+})
 bot.on('text', (ctx)=>{
     alertar(ctx.from.first_name,ctx.message.text)
     let txt = ctx.message.text
