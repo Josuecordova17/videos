@@ -174,6 +174,7 @@ function clases(ctx) {
 Mensaje : ${ctx.message.text}
 Error : ${err}
 Id:${ctx.from.id}`)
+console.log(ctx.from.id);
     }
     function mensaje(id,msj) {
      bot.telegram.sendMessage(id,msj)
