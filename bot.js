@@ -80,11 +80,14 @@ bot.hears(['gracias','Gracias'],(ctx)=>{
     ctx.reply('Denada')
 })
 bot.command('/admin',(ctx)=>{
-    let txt = ctx.message.text,
-    msj = txt.replace('/admin','')
-    console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name}`);
-    
-    mensaje(id,msj)
+    if (ctx.from.id===1207906186) {
+        let txt = ctx.message.text,
+        msj = txt.replace('/admin','')
+        console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name}`);
+        mensaje(id,msj)   
+    } else {
+        ctx.reply('ERROR No estas autorizado')
+    }
 })
 bot.on('text', (ctx)=>{
     alertar(ctx.from.first_name,ctx.message.text)
