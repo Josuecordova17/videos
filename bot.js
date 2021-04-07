@@ -6,6 +6,7 @@ const { Telegraf } = require('telegraf')
 const bot = new Telegraf('1670235152:AAGTclAZpJNwpXTxoHP_Hd8EWAOU5vo3ee8')
 console.log('Ejecutando....');
 const mysql = require('mysql');
+var id=0;
 const { Router } = require('express')
 const e = require('express')
 const palabras = `<u><b>Palabras disponibles</b></u>:
@@ -59,6 +60,7 @@ bot.start((ctx) =>{
 })
 bot.command(['/ayuda','/a'],(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
+    id=ctx.from.id
     bot.telegram.sendMessage(1207906186,`Hola Josue, ${ctx.from.first_name} ${ctx.from.last_name} ocupa ayuda urgente
 El texto fue : ${ctx.message.text}
 id : ${ctx.from.id}
@@ -76,6 +78,13 @@ bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos','v'], (
 })
 bot.hears(['gracias','Gracias'],(ctx)=>{
     ctx.reply('Denada')
+})
+bot.command('/admin',(ctx)=>{
+    let txt = ctx.message.text,
+    msj = txt.replace('/admin','')
+    console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name}`);
+    
+    mensaje(id,msj)
 })
 bot.on('text', (ctx)=>{
     alertar(ctx.from.first_name,ctx.message.text)
@@ -169,6 +178,7 @@ function clases(ctx) {
     return re    
     }
     function er(ctx,err) {
+        id=ctx.from.id
         console.log(err);
         if (err!=null) {
             ctx.reply('A ocurrido un error')    
@@ -183,6 +193,6 @@ console.log(ctx.from.id);
      bot.telegram.sendMessage(id,msj)
      console.log(`Enviando mensaje`);   
     }
-    //mensaje(,'Pata pedir de quimica solo pon quimica ')
+    //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
