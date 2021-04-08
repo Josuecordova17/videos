@@ -7,6 +7,7 @@ const bot = new Telegraf('1670235152:AAGTclAZpJNwpXTxoHP_Hd8EWAOU5vo3ee8')
 console.log('Ejecutando....');
 const mysql = require('mysql');
 var id=0;
+const msjId = 1207906186;
 const { Router } = require('express')
 const e = require('express')
 const palabras = `<u><b>Palabras disponibles</b></u>:
@@ -61,32 +62,40 @@ bot.start((ctx) =>{
 bot.command(['/ayuda','/a'],(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
     id=ctx.from.id
-    bot.telegram.sendMessage(1207906186,`Hola Josue, ${ctx.from.first_name} ${ctx.from.last_name} ocupa ayuda urgente
+    alertar(ctx.from.first_name,ctx.message.text)
+    bot.telegram.sendMessage(msjId,`Hola Josue, ${ctx.from.first_name} ${ctx.from.last_name} ocupa ayuda urgente
 El texto fue : ${ctx.message.text}
 id : ${ctx.from.id}
 Usuario : ${ctx.from.username}`)
 })
 bot.help((ctx)=>{
     ctx.reply(palabras,{parse_mode:'HTML'})
+    ctx.from.first_name,ctx.message.text
 })
-bot.command('/h',(ctx)=>(clase()))
+bot.command('/h',(ctx)=>{
+    ctx.reply(palabras,{parse_mode:'HTML'})
+    ctx.from.first_name,ctx.message.text
+})
 bot.command(['videos','Videos','v'],(ctx)=>{
     clases(ctx)
 })
 bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos','v'], (ctx)=>{
     clases(ctx)
 })
-bot.hears(['gracias','Gracias'],(ctx)=>{
+bot.hears(['gracias','Gracias'],(ctx)=>{ctx.reply(palabras,{parse_mode:'HTML'})
+    alertar(ctx.from.first_name,ctx.message.text)
     ctx.reply('Denada')
+
 })
 bot.command('/admin',(ctx)=>{
-    if (ctx.from.id===1207906186) {
+    if (ctx.from.id===msjId) {
         let txt = ctx.message.text,
         msj = txt.replace('/admin','')
         console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name}`);
         mensaje(id,msj)   
     } else {
         ctx.reply('ERROR No estas autorizado')
+        er(ctx,"Intento de acceso no autorizado")
     }
 })
 bot.on('text', (ctx)=>{
@@ -182,15 +191,18 @@ function clases(ctx) {
     }
     function er(ctx,err) {
         id=ctx.from.id
-        console.log(err);
         if (err!=null) {
             ctx.reply('A ocurrido un error')    
         }
-        bot.telegram.sendMessage(1207906186,`Ocurrio un error a : ${ctx.from.first_name}
+        bot.telegram.sendMessage(msjId,`Ocurrio un error a : ${ctx.from.first_name}
 Mensaje : ${ctx.message.text}
 Error : ${err}
 Id:${ctx.from.id}`)
-console.log(ctx.from.id);
+console.log(`Ocurrio un error a : ${ctx.from.first_name}
+Mensaje : ${ctx.message.text}
+Error : ${err}
+Id:${ctx.from.id}`);
+
     }
     function mensaje(id,msj) {
      bot.telegram.sendMessage(id,msj)
