@@ -91,7 +91,8 @@ bot.command('/admin',(ctx)=>{
     if (ctx.from.id===msjId) {
         let txt = ctx.message.text,
         msj = txt.replace('/admin','')
-        console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name}`);
+        let f = new Date();
+        console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name} a las ${f}`);
         mensaje(id,msj)   
     } else {
         ctx.reply('ERROR No estas autorizado')

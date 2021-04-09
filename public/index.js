@@ -6,7 +6,7 @@ function enviar() {
 let fname = proccesar(name)
 let clase = fname.indexOf(' ')
 clase=fname.slice(0,clase)
-const url='http://localhost:5656/'
+const url='http://192.168.0.8:5656/'
     let data={
         name:fname,
         link:link,
@@ -14,9 +14,11 @@ const url='http://localhost:5656/'
     }
          fetch(url, {
     method: 'PUT', // or 'PUT'
+    mode:'cors',
     body: JSON.stringify(data), // data can be `string` or {object}!
     headers:{
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin':'*'
     }
   }).then(res => res.json())
   .catch(error => console.error('Error:', error))
@@ -51,7 +53,7 @@ if (e.keyCode===13) {
 }
 }
 function fecha() {
-  const url='http://localhost:5656/'
+  const url='http://192.168.0.8:5656/'
   let fecha = new Date();
   fecha=fecha.toString()
   fecha=fecha.slice(0,15)
@@ -64,9 +66,11 @@ function fecha() {
     }
          fetch(url, {
     method: 'PUT', // or 'PUT'
+    mode : 'cors',
     body: JSON.stringify(data), // data can be `string` or {object}!
     headers:{
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin':'*'
     }
   }).then(res => res.json())
   .catch(error => console.error('Error:', error))
