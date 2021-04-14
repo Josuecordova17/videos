@@ -11,12 +11,13 @@ const msjId = 1207906186;
 const { Router } = require('express')
 const e = require('express')
 const palabras = `<u><b>Palabras disponibles</b></u>:
-Fisica
-Biologia
-Quimica
-/help
-/ayuda
-/videos`
+Fisica - Manda los videos de Fisica disponibles
+Biologia - Manda los videos de Biologia disponibles
+Quimica - Manda los videos de Quimica disponibles
+/help - Envia las palabras y los comandos disponibles
+/ayuda - Manda un mensaje a Josue dicendo que usted necesita ayuda, utilice si tiene una duda deberia verse asi:
+/ayuda Descripcion del problema
+/videos - Manda la vista de los videos disponibles`
 const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -55,11 +56,12 @@ app.put('/',(req,res)=>{
 app.use(express.static('public'))
 bot.start((ctx) =>{ 
     ctx.reply(`Bienvenid@ ${ctx.from.first_name}`)
-    ctx.reply('Mandame el nombre del video que deseas')
-    ctx.reply('Si no se manda el video al instante o tiene alguna duda Hable con Josue o mande /ayuda y agregar su problema')
+    ctx.reply('Mandame el nombre del video que deseas o utiliza /videos para ver que videos hay')
+    ctx.reply('Si no sabe que palabra o comando hace algo utilice /help')
+    ctx.reply('En el caso que te deje en visto es por que estoy dormida hablale a Josue por algun lado para que el me levante')
     alertar(ctx.from.first_name,ctx.message.text)
 })
-bot.command(['/ayuda','/a'],(ctx)=>{
+bot.command('/ayuda',(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
     id=ctx.from.id
     alertar(ctx.from.first_name,ctx.message.text)
@@ -87,10 +89,10 @@ bot.hears(['gracias','Gracias'],(ctx)=>{ctx.reply(palabras,{parse_mode:'HTML'})
     ctx.reply('Denada')
 
 })
-bot.command('/admin',(ctx)=>{
+bot.command('/a',(ctx)=>{
     if (ctx.from.id===msjId) {
         let txt = ctx.message.text,
-        msj = txt.replace('/admin','')
+        msj = txt.replace('/a','')
         let f = new Date();
         console.log(`Comando admin ejecutado a ${id} hecho por ${ctx.from.first_name} a las ${f}`);
         mensaje(id,msj)   
@@ -108,14 +110,17 @@ bot.on('text', (ctx)=>{
         if (txt==='biologia'||txt==="fisica"||txt==="quimica") {
             let sql = "SELECT * FROM `videos` WHERE `clase`='"+ txt + "'"
             connection.query(sql,(err,rows,fields)=>{
-                let re = ""
+                let t = cap(txt)
+                let re = `<b><u> Clase de ${t}</u></b>`
                 if (!err) {
                 for (let i = 0; i < rows.length; i++) {
+                    let n =rows[i].video,
+                nombre=cap(n)
                     re =re +`
 `+
-rows[i].video
+nombre
                 }
-                ctx.reply(re)
+                ctx.reply(re,{parse_mode:'HTML'})
                     }else{
                         er(ctx,err)
                }
