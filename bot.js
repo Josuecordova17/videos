@@ -10,6 +10,7 @@ var id=0;
 const msjId = 1207906186;
 const { Router } = require('express')
 const e = require('express')
+const path = require('path')
 const palabras = `<u><b>Palabras disponibles</b></u>:
 Fisica - Manda los videos de Fisica disponibles
 Biologia - Manda los videos de Biologia disponibles
@@ -53,6 +54,19 @@ app.put('/',(req,res)=>{
         })
         res.sendStatus(200)
     })
+    app.get('/t',(req,res)=>{
+        res.sendFile(path.join(__dirname, '/public', 'tarea.html'));
+    })
+    app.post('/tarea',(req,res)=>{
+       connection.query('INSERT INTO `tareas`(`clase`, `tarea`, `fentrega`) VALUES (?,?,?)',[req.body.clase,req.body.tarea,req.body.date],(err)=>{
+           if (!err) {
+               console.log(`Insert exitoso`);
+           } else {
+               console.log(err);
+           }
+       })
+       res.sendStatus(200)
+    })
 app.use(express.static('public'))
 bot.start((ctx) =>{ 
     ctx.reply(`Bienvenid@ ${ctx.from.first_name}`)
@@ -69,6 +83,9 @@ bot.command('/ayuda',(ctx)=>{
 El texto fue : ${ctx.message.text}
 id : ${ctx.from.id}
 Usuario : ${ctx.from.username}`)
+})
+bot.hears(['tarea','Tarea'],(ctx)=>{
+    tarea(ctx)
 })
 bot.help((ctx)=>{
     ctx.reply(palabras,{parse_mode:'HTML'})
@@ -213,6 +230,47 @@ Id:${ctx.from.id}`);
     function mensaje(id,msj) {
      bot.telegram.sendMessage(id,msj)
      console.log(`Enviando mensaje`);   
+    }
+    function pasarAISO(fecha) {
+        var fec = new Date();
+        console.log(fec);
+var day = ('0'+fec.getDate()).slice(-2),
+mes=fec.getMonth()+1,
+year=fec.getFullYear()
+mes= ('0'+mes).slice(-2)
+re=`${year}-${mes}-${day}`
+return re
+    }
+    function borrar() {
+        var af = pasarAISO(Date())
+        console.log(req.body.date);
+          if ((Date.parse(req.body.date)<Date.parse(af))&&!(Date(req.body.date)===af)) {
+            console.log(true);
+        } else {
+            console.log(false);
+        }
+        res.sendStatus(200)   
+    }
+    function tarea(ctx) {
+        alertar(ctx.from.first_name,ctx.message.text)
+    var re='<b><u>Tareas</u></b>';
+    connection.query("SELECT * FROM `tareas`",(err,rows,fields)=>{
+        if (!err) {
+            for (let i = 0; i < rows.length; i++) {
+                var n =rows[i].tarea,
+                f=`${rows[i].fentrega}`
+                for (let i = 0; i <4; i++) {
+                    f=f.replace('-', '/')   
+                }
+                    re =re +`
+`+`${n} el ${f}`
+            }
+            ctx.reply(re,{parse_mode:'HTML'})
+            }else{
+        er(ctx,err)
+       }
+        })
+    
     }
     //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
