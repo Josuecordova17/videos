@@ -8,7 +8,7 @@ console.log('Ejecutando....');
 const mysql = require('mysql');
 var id=0;
 const msjId = 1207906186;
-const { Router } = require('express')
+const { Router, query } = require('express')
 const e = require('express')
 const path = require('path')
 const palabras = `<u><b>Palabras disponibles</b></u>:
@@ -251,27 +251,38 @@ return re
         }
         res.sendStatus(200)   
     }
-    function tarea(ctx) {
-        alertar(ctx.from.first_name,ctx.message.text)
+    function tarea() {
+        var fechas=[]
     var re='<b><u>Tareas</u></b>';
-    connection.query("SELECT * FROM `tareas`",(err,rows,fields)=>{
+    connection.query("SELECT `fentrega` FROM `tareas`",(err,rows,fields)=>{
         if (!err) {
             for (let i = 0; i < rows.length; i++) {
-                var n =rows[i].tarea,
-                f=`${rows[i].fentrega}`
-                for (let i = 0; i <4; i++) {
-                    f=f.replace('-', '/')   
-                }
-                    re =re +`
-`+`${n} el ${f}`
+               if (fechas.indexOf(rows[i].fentrega)==-1) {
+                fechas.push(rows[i].fentrega)   
+               }
             }
-            ctx.reply(re,{parse_mode:'HTML'})
-            }else{
-        er(ctx,err)
-       }
-        })
+            fechas.sort()
+            fechas.forEach(e => {
+                let sql = "SELECT * FROM `tareas` WHERE `fentrega`='"+ e + "'"
+            connection.query(sql,(err,rows,fields)=>{
+                let re = `<b><u>Tareas</u></b>`
+                re=re+`
+`+e
+                if (!err) {
+                for (let i = 0; i < rows.length; i++) {
+                    let n =rows[i].tarea
+                    re =re +`
+`+
+n
+                }
+                ctx.reply(re,{parse_mode:'HTML'})
+                    }else{
+                        er(ctx,err)
+               }
+                })
     
-    }
+    });
+    tarea()
     //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
