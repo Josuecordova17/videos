@@ -85,7 +85,7 @@ id : ${ctx.from.id}
 Usuario : ${ctx.from.username}`)
 })
 bot.hears(['tarea','Tarea'],(ctx)=>{
-    tarea(ctx)
+    tare(ctx)
 })
 bot.help((ctx)=>{
     ctx.reply(palabras,{parse_mode:'HTML'})
@@ -233,7 +233,6 @@ Id:${ctx.from.id}`);
     }
     function pasarAISO(fecha) {
         var fec = new Date();
-        console.log(fec);
 var day = ('0'+fec.getDate()).slice(-2),
 mes=fec.getMonth()+1,
 year=fec.getFullYear()
@@ -243,46 +242,44 @@ return re
     }
     function borrar() {
         var af = pasarAISO(Date())
-        console.log(req.body.date);
           if ((Date.parse(req.body.date)<Date.parse(af))&&!(Date(req.body.date)===af)) {
-            console.log(true);
-        } else {
-            console.log(false);
         }
         res.sendStatus(200)   
     }
-    function tarea() {
+    function tare(ctx) {
         var fechas=[]
-    var re='<b><u>Tareas</u></b>';
-    connection.query("SELECT `fentrega` FROM `tareas`",(err,rows,fields)=>{
+    var re='<b><u>Tareas</u></b>',
+    n;
+    connection.query("SELECT * FROM `tareas`",(err,rows,fields)=>{
         if (!err) {
             for (let i = 0; i < rows.length; i++) {
-               if (fechas.indexOf(rows[i].fentrega)==-1) {
-                fechas.push(rows[i].fentrega)   
-               }
+                const e = rows[i];
+                let fe=e.fentrega
+                if (fechas.indexOf(fe)==-1) {
+                   fechas.push(fe) 
+                }
             }
             fechas.sort()
-            fechas.forEach(e => {
-                let sql = "SELECT * FROM `tareas` WHERE `fentrega`='"+ e + "'"
-            connection.query(sql,(err,rows,fields)=>{
-                let re = `<b><u>Tareas</u></b>`
+            for (let i = 0; i < fechas.length; i++) {
+                var fec = fechas[i];
                 re=re+`
-`+e
-                if (!err) {
+<u><b>${fec}</b></u>`
                 for (let i = 0; i < rows.length; i++) {
-                    let n =rows[i].tarea
-                    re =re +`
-`+
-n
+                    const e = rows[i];
+                    if (e.fentrega==fec) {
+                        re = re+`
+${e.tarea}`
+                        
+                    }
                 }
-                ctx.reply(re,{parse_mode:'HTML'})
-                    }else{
-                        er(ctx,err)
-               }
-                })
-    
-    });
-    tarea()
+            }
+            ctx.reply(re,{parse_mode:'HTML'})
+            }else{
+        er(ctx,err)
+       }
+      
+        })
+    }
     //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
