@@ -25,7 +25,7 @@ const connection = mysql.createConnection({
   password : '',
   database:'videos'
 });
-const port = process.env.PORT || 5656;
+const port = process.env.PORT || 80;
 connection.connect((err)=>{
     if (!err) {
         console.log("Conexion existosa".green)
@@ -124,6 +124,14 @@ bot.on('text', (ctx)=>{
         txt= txt.toLowerCase()
         txt= txt.trim()
         txt=tildes(txt)
+        const r1='"'
+        const r2="'"
+        const re1 = new RegExp(r1,'g');
+        const re2 = new RegExp(r2,'g');
+        txt=txt.replace(re1,'')
+        txt=txt.replace(re2,'')
+        txt=txt.replace(/`/g,'')
+        console.log(txt);
         if (txt==='biologia'||txt==="fisica"||txt==="quimica") {
             let sql = "SELECT * FROM `videos` WHERE `clase`='"+ txt + "'"
             connection.query(sql,(err,rows,fields)=>{
