@@ -1,0 +1,8 @@
+
+express
+fs 
+morgan
+mysq
+nodemon
+telegraf
+colors
