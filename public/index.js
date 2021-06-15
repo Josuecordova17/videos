@@ -12,20 +12,26 @@ const url='http://192.168.0.8:80/'
         link:link,
         clase:clase
     }
-         fetch(url, {
-    method: 'PUT', // or 'PUT'
-    mode:'cors',
-    body: JSON.stringify(data), // data can be `string` or {object}!
-    headers:{
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin':'*'
+    if (link===''|| fname==='') {
+      console.log(`Ocurrio un error uno de los dos estaba vacio`);
+      
+    } else {
+      fetch(url, {
+        method: 'PUT', // or 'PUT'
+        mode:'cors',
+        body: JSON.stringify(data), // data can be `string` or {object}!
+        headers:{
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin':'*'
+        }
+      }).then(res => res.json())
+      .catch(error => console.error('Error:', error))
+      .then(()=>{
+        l.value=""
+        n.value=""
+      }); 
     }
-  }).then(res => res.json())
-  .catch(error => console.error('Error:', error))
-  .then(()=>{
-    l.value=""
-    n.value=""
-  });     
+          
 }
 //manda el valor en miniscula sin espacios y tildes
 function proccesar(value) {

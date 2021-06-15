@@ -131,7 +131,6 @@ bot.on('text', (ctx)=>{
         txt=txt.replace(re1,'')
         txt=txt.replace(re2,'')
         txt=txt.replace(/`/g,'')
-        console.log(txt);
         if (txt==='biologia'||txt==="fisica"||txt==="quimica") {
             let sql = "SELECT * FROM `videos` WHERE `clase`='"+ txt + "'"
             connection.query(sql,(err,rows,fields)=>{
