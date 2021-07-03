@@ -33,6 +33,23 @@ connection.connect((err)=>{
         console.error("Conexion fallida /n Error"+JSON.stringify(err,undefined,2))
     }
 });
+const executeQuery=async(query)=>{
+    return new Promise((resolve,rejects)=>{
+        connection.query(query,(error,rows,fields)=>{
+            if (!error) {
+                resolve({rows})
+            } else {
+                rejects({message:"error en db",error:error})
+            }
+        })
+    })
+}
+// const inicio = async ()=>{
+//     let txt = 'biologia'
+    
+//     console.log(re);
+// }
+// inicio()
 app.use(morgan('dev'))
 app.use(express.json())
 app.listen(port,()=>{
@@ -53,6 +70,52 @@ app.put('/',(req,res)=>{
             }
         })
         res.sendStatus(200)
+    })
+    app.put('/video',(req,res)=>{
+        let txt = req.body.txt
+        console.log(txt);
+let ctx={
+            message:{
+                text:txt
+            },
+            from:{
+                id:'whatsapp',
+                first_name:'whatsapp'
+            }
+        }
+        const xl = async (txt,ctx)=>{
+            let re = await videos(txt,ctx)
+            while (re.indexOf('<b>')!=-1||re.indexOf('</b>')!=-1||re.indexOf('<u>')!=-1||re.indexOf('</u>')!=-1) {
+                re=re.replace('<b>','*')
+                re=re.replace('</b>','*')
+                re=re.replace('<u>','_')
+                re=re.replace('</u>','_')   
+            }
+             res.send({re:re})
+          }
+          xl(txt,ctx)   
+    })
+    app.put('/nclases',(req,res)=>{
+        let txt = req.body.txt
+        console.log(txt);
+let ctx={
+            message:{
+                text:txt
+            },
+            from:{
+                id:'whatsapp',
+                first_name:'whatsapp'
+            }
+        }
+        const xl = async (txt,ctx)=>{
+            let re = await nclases(txt,ctx)
+            re=re.replace('<b>','*')
+                re=re.replace('</b>','*')
+                re=re.replace('<u>','')
+                re=re.replace('</u>','')
+             res.send({re:re})
+          }
+          xl(txt,ctx)   
     })
     app.get('/t',(req,res)=>{
         res.sendFile(path.join(__dirname, '/public', 'tarea.html'));
@@ -132,40 +195,17 @@ bot.on('text', (ctx)=>{
         txt=txt.replace(re2,'')
         txt=txt.replace(/`/g,'')
         if (txt==='biologia'||txt==="fisica"||txt==="quimica") {
-            let sql = "SELECT * FROM `videos` WHERE `clase`='"+ txt + "'"
-            connection.query(sql,(err,rows,fields)=>{
-                let t = cap(txt)
-                let re = `<b><u> Clase de ${t}</u></b>`
-                if (!err) {
-                for (let i = 0; i < rows.length; i++) {
-                    let n =rows[i].video,
-                nombre=cap(n)
-                    re =re +`
-`+
-nombre
-                }
+            const wl = async (txt,ctx)=>{
+              let re = await nclases(txt)
                 ctx.reply(re,{parse_mode:'HTML'})
-                    }else{
-                        er(ctx,err)
-               }
-                })
+            }
+            wl(txt,ctx)
         } else {
-            let sql ="SELECT * FROM `videos` WHERE `video`='"+ txt + "'"
-            connection.query(sql,(err,rows,fields)=>{
-                if (!err) {
-                    if (rows=="") {
-                        er(ctx,err)
-                        ctx.reply(`Oh no el video solicitado no existe :
-Comprueba la ortografia
-${palabras}
-Tambien puedes revisar la ortografia`,{parse_mode:'HTML'})
-                    } else {
-                     ctx.reply(`El link es : ${rows[0].linkVideo}`)   
-                    }  
-                    }else{
-                        er(ctx,err)
-               }
-                })   
+            const rl = async (txt,ctx)=>{
+                let re = await videos(txt,ctx)
+                  ctx.reply(re,{parse_mode:'HTML'})
+              }
+              rl(txt,ctx)           
         }    
 })
 bot.launch()
@@ -287,6 +327,37 @@ ${e.tarea}`
       
         })
     }
+async function nclases(txt) {
+    resultado =await executeQuery("SELECT * FROM `videos` WHERE `clase`='"+ txt + "'")
+    let rows = resultado.rows
+    let t = cap(txt)
+                let re = `<b><u> Clase de ${t}</u></b>`
+                for (let i = 0; i < rows.length; i++) {
+                    let n =rows[i].video,
+                nombre=cap(n)
+                    re =re +`
+`+
+nombre
+                }
+                console.log(re);
+return re
+}
+async function videos(txt,ctx) {
+    let sql ="SELECT * FROM `videos` WHERE `video`='"+ txt + "'"
+    resultado =await executeQuery(sql)
+    let rows = resultado.rows
+    var re=''
+            if (rows=="") {
+                er(ctx,null)
+                re=(`Oh no el video solicitado no existe :
+Comprueba la ortografia
+${palabras}
+Tambien puedes revisar la ortografia`)
+            } else {
+             re=(`El link es : ${rows[0].linkVideo}`)   
+            }       
+return re
+}
     //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
