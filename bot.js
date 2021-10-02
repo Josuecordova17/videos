@@ -13,7 +13,7 @@ const e = require('express')
 const path = require('path')
 const palabras = `<u><b>Palabras disponibles</b></u>:
 Fisica - Manda los videos de Fisica disponibles
-Biologia - Manda los videos de Biologia disponibles
+Logica - Manda los videos de Logica disponibles
 Quimica - Manda los videos de Quimica disponibles
 /help - Envia las palabras y los comandos disponibles
 /ayuda - Manda un mensaje a Josue dicendo que usted necesita ayuda, utilice si tiene una duda deberia verse asi:
@@ -45,7 +45,7 @@ const executeQuery=async(query)=>{
     })
 }
 // const inicio = async ()=>{
-//     let txt = 'biologia'
+//     let txt = 'logica'
     
 //     console.log(re);
 // }
@@ -194,7 +194,7 @@ bot.on('text', (ctx)=>{
         txt=txt.replace(re1,'')
         txt=txt.replace(re2,'')
         txt=txt.replace(/`/g,'')
-        if (txt==='biologia'||txt==="fisica"||txt==="quimica") {
+        if (txt==='logica'||txt==="fisica"||txt==="quimica") {
             const wl = async (txt,ctx)=>{
               let re = await nclases(txt)
                 ctx.reply(re,{parse_mode:'HTML'})
