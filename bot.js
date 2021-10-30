@@ -117,19 +117,6 @@ let ctx={
           }
           xl(txt,ctx)   
     })
-    app.get('/t',(req,res)=>{
-        res.sendFile(path.join(__dirname, '/public', 'tarea.html'));
-    })
-    app.post('/tarea',(req,res)=>{
-       connection.query('INSERT INTO `tareas`(`clase`, `tarea`, `fentrega`) VALUES (?,?,?)',[req.body.clase,req.body.tarea,req.body.date],(err)=>{
-           if (!err) {
-               console.log(`Insert exitoso`);
-           } else {
-               console.log(err);
-           }
-       })
-       res.sendStatus(200)
-    })
 app.use(express.static('public'))
 bot.start((ctx) =>{ 
     ctx.reply(`Bienvenid@ ${ctx.from.first_name}`)
@@ -137,6 +124,9 @@ bot.start((ctx) =>{
     ctx.reply('Si no sabe que palabra o comando hace algo utilice /help')
     ctx.reply('En el caso que te deje en visto es por que estoy dormida hablale a Josue por algun lado para que el me levante')
     alertar(ctx.from.first_name,ctx.message.text)
+})
+bot.command('/todo',(ctx)=>{
+    todas(ctx)
 })
 bot.command('/ayuda',(ctx)=>{
     ctx.reply('Ok ya se le avisara a Josue que usted necesita ayuda')
@@ -163,6 +153,9 @@ bot.command(['videos','Videos','v'],(ctx)=>{
 })
 bot.hears(['/vídeos','/Vídeos','videos','Videos','/vídeos','/Vídeos','v'], (ctx)=>{
     clases(ctx)
+})
+bot.hears(['Todo',"Todas",'todo',"todas"],(ctx)=>{
+    todas(ctx)
 })
 bot.hears(['gracias','Gracias'],(ctx)=>{ctx.reply(palabras,{parse_mode:'HTML'})
     alertar(ctx.from.first_name,ctx.message.text)
@@ -327,6 +320,21 @@ ${e.tarea}`
       
         })
     }
+async function todas(ctx) {
+    alertar(ctx.from.first_name,ctx.message.text)
+     resultado =await executeQuery("SELECT `video`, `linkVideo` FROM `videos` WHERE `linkVideo` NOT IN ('')")
+     rows = resultado.rows
+    let re='';
+    for (let i = 0; i < rows.length; i++) {
+        let n =rows[i].video,
+    nombre=cap(n)
+        re =re +`
+`+
+`<b>${nombre} : </b> 
+${rows[1].linkVideo}`
+    }
+    ctx.reply(re,{parse_mode:'HTML'})
+}
 async function nclases(txt) {
     resultado =await executeQuery("SELECT * FROM `videos` WHERE `clase`='"+ txt + "'")
     let rows = resultado.rows

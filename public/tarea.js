@@ -3,7 +3,7 @@ function enviar() {
     date = document.getElementById('date').value,
     clase = homework.indexOf(' ')
     clase=homework.slice(0,clase)
-   const url='http://192.168.0.8:80/tarea'
+   const url='http://192.168.1.8:80/tarea'
        let data={
            tarea:homework,
            clase:clase,
