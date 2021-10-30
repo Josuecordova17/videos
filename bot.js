@@ -18,7 +18,9 @@ Quimica - Manda los videos de Quimica disponibles
 /help - Envia las palabras y los comandos disponibles
 /ayuda - Manda un mensaje a Josue dicendo que usted necesita ayuda, utilice si tiene una duda deberia verse asi:
 /ayuda Descripcion del problema
-/videos - Manda la vista de los videos disponibles`
+/videos - Manda la lista de los videos disponibles
+/todo - Manda una lista de los videos disponibles con todo y links
+`
 const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
