@@ -46,12 +46,6 @@ const executeQuery=async(query)=>{
         })
     })
 }
-// const inicio = async ()=>{
-//     let txt = 'logica'
-    
-//     console.log(re);
-// }
-// inicio()
 app.use(morgan('dev'))
 app.use(express.json())
 app.listen(port,()=>{
@@ -138,9 +132,6 @@ bot.command('/ayuda',(ctx)=>{
 El texto fue : ${ctx.message.text}
 id : ${ctx.from.id}
 Usuario : ${ctx.from.username}`)
-})
-bot.hears(['tarea','Tarea'],(ctx)=>{
-    tare(ctx)
 })
 bot.help((ctx)=>{
     ctx.reply(palabras,{parse_mode:'HTML'})
@@ -272,56 +263,7 @@ Id:${ctx.from.id}`);
     function mensaje(id,msj) {
      bot.telegram.sendMessage(id,msj)
      console.log(`Enviando mensaje`);   
-    }
-    function pasarAISO(fecha) {
-        var fec = new Date();
-var day = ('0'+fec.getDate()).slice(-2),
-mes=fec.getMonth()+1,
-year=fec.getFullYear()
-mes= ('0'+mes).slice(-2)
-re=`${year}-${mes}-${day}`
-return re
-    }
-    function borrar() {
-        var af = pasarAISO(Date())
-          if ((Date.parse(req.body.date)<Date.parse(af))&&!(Date(req.body.date)===af)) {
-        }
-        res.sendStatus(200)   
-    }
-    function tare(ctx) {
-        var fechas=[]
-    var re='<b><u>Tareas</u></b>',
-    n;
-    connection.query("SELECT * FROM `tareas`",(err,rows,fields)=>{
-        if (!err) {
-            for (let i = 0; i < rows.length; i++) {
-                const e = rows[i];
-                let fe=e.fentrega
-                if (fechas.indexOf(fe)==-1) {
-                   fechas.push(fe) 
-                }
-            }
-            fechas.sort()
-            for (let i = 0; i < fechas.length; i++) {
-                var fec = fechas[i];
-                re=re+`
-<u><b>${fec}</b></u>`
-                for (let i = 0; i < rows.length; i++) {
-                    const e = rows[i];
-                    if (e.fentrega==fec) {
-                        re = re+`
-${e.tarea}`
-                        
-                    }
-                }
-            }
-            ctx.reply(re,{parse_mode:'HTML'})
-            }else{
-        er(ctx,err)
-       }
-      
-        })
-    }
+    } 
 async function todas(ctx) {
     alertar(ctx.from.first_name,ctx.message.text)
      resultado =await executeQuery("SELECT `video`, `linkVideo` FROM `videos` WHERE `linkVideo` NOT IN ('')")
