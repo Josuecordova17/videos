@@ -69,7 +69,7 @@ app.put('/',(req,res)=>{
     })
     app.put('/video',(req,res)=>{
         let txt = req.body.txt
-        console.log(txt);
+
 let ctx={
             message:{
                 text:txt
@@ -275,7 +275,7 @@ async function todas(ctx) {
         re =re +`
 `+
 `<b>${nombre} : </b> 
-${rows[1].linkVideo}`
+${rows[i].linkVideo}`
     }
     ctx.reply(re,{parse_mode:'HTML'})
 }
@@ -291,7 +291,6 @@ async function nclases(txt) {
 `+
 nombre
                 }
-                console.log(re);
 return re
 }
 async function videos(txt,ctx) {
