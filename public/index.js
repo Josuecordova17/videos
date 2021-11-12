@@ -6,15 +6,18 @@ function enviar() {
 let fname = proccesar(name)
 let clase = fname.indexOf(' ')
 clase=fname.slice(0,clase)
-const url='http://192.168.1.8:80/'
+const url='http://localhost:80/'
     let data={
         name:fname,
         link:link,
         clase:clase
     }
-    if (link===''|| fname==='') {
-      console.log(`Ocurrio un error uno de los dos estaba vacio`);
-      
+    if (link===''|| fname===''|| fname.indexOf("https")!=-1) {
+      if(fname.indexOf("https")!=-1){
+        console.log('Se introdujo un link');
+      }else{
+        console.log(`Ocurrio un error uno de los dos estaba vacio`);
+      }
     } else {
       fetch(url, {
         method: 'PUT', // or 'PUT'
@@ -59,7 +62,7 @@ if (e.keyCode===13) {
 }
 }
 function fecha() {
-  const url='http://192.168.1.8:80/'
+  const url='http://localhost:80/'
   let fecha = new Date();
   fecha=fecha.toString()
   fecha=fecha.slice(0,15)
