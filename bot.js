@@ -309,6 +309,23 @@ Tambien puedes revisar la ortografia`)
             }       
 return re
 }
+async function nuevoDia(D) {
+    let Di=new Date()
+    let hoy= Di.toString()
+    hoy =  hoy.slice(0,15).toUpperCase()
+    let sql ="SELECT `video` FROM `videos` WHERE `video`='"+ hoy + "'"
+    resultado =await executeQuery(sql)
+    if (resultado.rows==''&&Di.getDay()!=4) {
+        connection.query("INSERT INTO `videos`(`video`, `linkVideo`, `clase`) VALUES (?,' ',' ')",[hoy],(err)=>{
+            if (!err) {
+                console.log("Insert exitoso");      
+            } else {
+            console.log(err);    
+            }
+        })
+    }
+}
+nuevoDia()
     //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
