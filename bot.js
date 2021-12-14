@@ -315,7 +315,8 @@ async function nuevoDia(D) {
     hoy =  hoy.slice(0,15).toUpperCase()
     let sql ="SELECT `video` FROM `videos` WHERE `video`='"+ hoy + "'"
     resultado =await executeQuery(sql)
-    if (resultado.rows==''&&Di.getDay()!=4) {
+    let pl = Di.getDay()
+    if (resultado.rows==''&&!(pl==4||pl==6||pl==0)) {
         connection.query("INSERT INTO `videos`(`video`, `linkVideo`, `clase`) VALUES (?,' ',' ')",[hoy],(err)=>{
             if (!err) {
                 console.log("Insert exitoso");      

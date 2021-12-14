@@ -6,7 +6,7 @@ function enviar() {
 let fname = proccesar(name)
 let clase = fname.indexOf(' ')
 clase=fname.slice(0,clase)
-const url='http://localhost:80/'
+const url='http://192.168.1.8:80/'
     let data={
         name:fname,
         link:link,
@@ -62,7 +62,7 @@ if (e.keyCode===13) {
 }
 }
 function fecha() {
-  const url='http://localhost:80/'
+  const url='http://192.168.1.8:80/'
   let fecha = new Date();
   fecha=fecha.toString()
   fecha=fecha.slice(0,15)
