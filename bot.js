@@ -8,8 +8,6 @@ console.log('Ejecutando....');
 const mysql = require('mysql');
 var id=0;
 const msjId = 1207906186;
-const { Router, query } = require('express')
-const e = require('express')
 const path = require('path')
 const palabras = `<u><b>Palabras disponibles</b></u>:
 Fisica - Manda los videos de Fisica disponibles
@@ -205,7 +203,7 @@ function clases(ctx) {
             for (let i = 0; i < rows.length; i++) {
                 let n =rows[i].video,
                 nombre=cap(n)
-                if (nombre.indexOf('2021')!=-1) {
+                if (nombre.indexOf('202')!=-1) {
                     re =re +`
 `+`<u><b>${nombre}</b></u>`
                 } else {
