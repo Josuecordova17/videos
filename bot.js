@@ -178,7 +178,7 @@ bot.on('text', (ctx)=>{
         txt=txt.replace(re1,'')
         txt=txt.replace(re2,'')
         txt=txt.replace(/`/g,'')
-        if (txt==='logica'||txt==="fisica"||txt==="quimica") {
+        if (txt==='biologia'||txt==="fisica"||txt==="ambiente"||txt==="proyectos") {
             const wl = async (txt,ctx)=>{
               let re = await nclases(txt)
                 ctx.reply(re,{parse_mode:'HTML'})
