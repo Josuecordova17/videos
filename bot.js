@@ -178,7 +178,7 @@ bot.on('text', (ctx)=>{
         txt=txt.replace(re1,'')
         txt=txt.replace(re2,'')
         txt=txt.replace(/`/g,'')
-        if (txt==='biologia'||txt==="fisica"||txt==="ambiente"||txt==="proyectos") {
+        if (txt==='logica'||txt==="fisica"||txt==="quimica") {
             const wl = async (txt,ctx)=>{
               let re = await nclases(txt)
                 ctx.reply(re,{parse_mode:'HTML'})
@@ -324,7 +324,7 @@ async function nuevoDia(D) {
         })
     }
 }
-nuevoDia()
+//nuevoDia()
     //mensaje(1485910231,'Sin malas palabras puto att: cordova ')
     //Avisar sobre actualizacion
     //mensaje(-1001401909028,'Ahora ya no es soportado mas /palabras en su lugar usar /help')
